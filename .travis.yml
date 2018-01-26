@@ -11,17 +11,23 @@ dist: trusty
 # osx_image: xcode8.2
 #
 install:
-    - sudo apt-get -y install automake gcc make libx11-dev libxext-dev libxi-dev libfreetype6-dev libfontconfig1-dev zlib1g-dev libjpeg-dev libpng12-dev
-    - sudo add-apt-repository -y ppa:ondrej/autotools
-    - sudo apt-get -y update
-    - sudo apt-get -y install automake-1.15
+  - sudo apt-get -y install git build-essential cmake zlib1g-dev libpng-dev libcairo2-dev libfreetype6-dev
+  - sudo apt-get -y install libjson-c-dev libfontconfig1-dev libgtkmm-3.0-dev libpangomm-1.4-dev libgl-dev libglu-dev libspnav-dev
+  - # sudo add-apt-repository -y ppa:ondrej/autotools
+  - # sudo apt-get -y update
+  - # sudo apt-get -y install automake-1.15
 #
 #  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./.travis/install-debian.sh; fi
 #  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./.travis/install-macos.sh; fi
 #
 script:
-  - bash ./configure --prefix=/usr
-  - make -j$(nproc)
+  - git clone https://github.com/symbian9/solvespace-appimage
+  - cd solvespace
+  - git submodule update --init extlib/libdxfrw
+  - mkdir build
+  - cd build
+  - cmake .. -DCMAKE_BUILD_TYPE=Release
+  - make
   - make install DESTDIR=$(readlink -f appdir) ; find appdir/
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
