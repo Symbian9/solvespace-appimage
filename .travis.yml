@@ -12,7 +12,7 @@ dist: trusty
 #
 install:
   - sudo apt-get -y install git build-essential cmake zlib1g-dev libpng-dev libcairo2-dev libfreetype6-dev
-  - sudo apt-get -y install libjson-c-dev libfontconfig1-dev libgtkmm-3.0-dev libpangomm-1.4-dev libgl-dev libglu-dev libspnav-dev
+  - sudo apt-get -y install libjson-c-dev libfontconfig1-dev libgtkmm-3.0-dev libpangomm-1.4-dev libgl1-mesa-dev libglu-dev libspnav-dev
   - # sudo add-apt-repository -y ppa:ondrej/autotools
   - # sudo apt-get -y update
   - # sudo apt-get -y install automake-1.15
@@ -61,8 +61,12 @@ branches:
     - /^(?i:continuous)$/
 
 notifications:
+  email: false
   irc:
     channels:
       - "chat.freenode.net#solvespace"
     use_notice: true
     skip_join: true
+    template:
+      - "%{repository_slug} (%{commit}) : %{message} %{foo} "
+      - "Build details: %{build_url}"
